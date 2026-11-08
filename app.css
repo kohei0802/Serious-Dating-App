@@ -1,0 +1,11 @@
+body {
+  margin: 0;
+}
+
+.card {
+  border: thick double burlywood;
+  padding: 15px;
+  max-width: 500px;
+  display: flex;
+  flex-direction: column;
+}

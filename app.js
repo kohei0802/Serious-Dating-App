@@ -1,71 +1,13 @@
-const profiles = [
-  {
-    name: "Amy",
-    age: 21,
-    bio: "i like cake",
-    q1: "don't want to marry",
-    q2: "can cook",
-    q3: "eating is hobby",
-  },
-  {
-    name: "Kathy",
-    age: 22,
-    bio: "i like dogs",
-    q1: "want to marry",
-    q2: "no cook",
-    q3: "hiking is hobby",
-  },
-  {
-    name: "Elena",
-    age: 23,
-    bio: "i like cats",
-    q1: "don't want to marry",
-    q2: "no cook",
-    q3: "photography is hobby",
-  },
-  {
-    name: "Bonnie",
-    age: 25,
-    bio: "i work a lot",
-    q1: "want to marry",
-    q2: "can cook",
-    q3: "paiting is hobby",
-  },
-  {
-    name: "Caroline",
-    age: 24,
-    bio: "i sing",
-    q1: "don't want to marry",
-    q2: "can cook",
-    q3: "movie is hobby",
-  },
-];
+async function getProfiles(url) {
+  const response = await fetch(url);
+  if (!response.ok) {
+    throw new Error(response.status);
+  }
 
-let profileIndex = 0;
-
-const root = document.getElementById("root");
-
-// const div1 = document.createElement("div");
-
-// root.appendChild(div1);
-
-const currentcard = document.createElement("div");
-currentcard.className = "card";
-
-root.appendChild(currentcard);
-
-renderProfile(profiles[0]);
-
-const button = document.createElement("button");
-button.textContent = "Next";
-button.id = "Next";
-root.appendChild(button);
-
-button.addEventListener("click", () => {
-  profileIndex = (profileIndex + 1) % profiles.length;
-
-  renderProfile(profiles[profileIndex]);
-});
+  const result = await response.json();
+  console.log(result);
+  return result;
+}
 
 function renderProfile(profile) {
   currentcard.textContent = "";
@@ -88,3 +30,40 @@ function renderProfile(profile) {
   currentcard.appendChild(q2Div);
   currentcard.appendChild(q3Div);
 }
+
+async function main() {
+  ///
+  currentcard.textContent = "Loading....";
+
+  try {
+    const profiles = await getProfiles("http://localhost:3000/profiles");
+
+    let profileIndex = 0;
+
+    renderProfile(profiles[0]);
+
+    button = document.createElement("button");
+    button.textContent = "Next";
+    button.id = "Next";
+    root.appendChild(button);
+
+    button.addEventListener("click", () => {
+      profileIndex = (profileIndex + 1) % profiles.length;
+
+      renderProfile(profiles[profileIndex]);
+    });
+  } catch (e) {
+    currentcard.textContent = "Couldn't load profiles";
+    console.error(e);
+  }
+}
+
+const root = document.getElementById("root");
+let button = null;
+const currentcard = document.createElement("div");
+
+currentcard.className = "card";
+
+root.appendChild(currentcard);
+
+main();

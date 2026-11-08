@@ -41,7 +41,7 @@ const profiles = [
   },
 ];
 
-profileIndex = 0;
+let profileIndex = 0;
 
 const root = document.getElementById("root");
 

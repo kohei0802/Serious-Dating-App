@@ -2,6 +2,7 @@
   "profiles": [
     {
       "id": 1,
+      "likesYou": true,
       "name": "Amy",
       "age": 21,
       "bio": "i like cake",
@@ -11,6 +12,7 @@
     },
     {
       "id": 2,
+      "likesYou": false,
       "name": "Kathy",
       "age": 22,
       "bio": "i like dogs",
@@ -20,6 +22,7 @@
     },
     {
       "id": 3,
+      "likesYou": false,
       "name": "Elena",
       "age": 23,
       "bio": "i like cats",
@@ -29,6 +32,7 @@
     },
     {
       "id": 4,
+      "likesYou": true,
       "name": "Bonnie",
       "age": 25,
       "bio": "i work a lot",
@@ -38,6 +42,7 @@
     },
     {
       "id": 5,
+      "likesYou": true,
       "name": "Caroline",
       "age": 24,
       "bio": "i sing",
@@ -47,6 +52,7 @@
     },
     {
       "id": 6,
+      "likesYou": false,
       "name": "Mika",
       "age": 26,
       "bio": "i read a lot of history",
@@ -56,6 +62,7 @@
     },
     {
       "id": 7,
+      "likesYou": false,
       "name": "Joyce",
       "age": 23,
       "bio": "i travel whenever i can",
@@ -65,6 +72,7 @@
     },
     {
       "id": 8,
+      "likesYou": true,
       "name": "Hana",
       "age": 27,
       "bio": "i play piano",
@@ -74,6 +82,7 @@
     },
     {
       "id": 9,
+      "likesYou": false,
       "name": "Rachel",
       "age": 22,
       "bio": "i am a night owl",
@@ -83,6 +92,7 @@
     },
     {
       "id": 10,
+      "likesYou": false,
       "name": "Yuki",
       "age": 24,
       "bio": "i love the beach",

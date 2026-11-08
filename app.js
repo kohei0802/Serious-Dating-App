@@ -12,18 +12,23 @@ async function getProfiles(url) {
 function renderProfile(profile) {
   currentcard.textContent = "";
   const nameDiv = document.createElement("div");
+  const likeDiv = document.createElement("div");
   const ageDiv = document.createElement("div");
   const bioDiv = document.createElement("div");
   const q1Div = document.createElement("div");
   const q2Div = document.createElement("div");
   const q3Div = document.createElement("div");
   nameDiv.textContent = profile.name;
+  likeDiv.textContent = profile.likesYou
+    ? `${profile.name} liked your profile!`
+    : "";
   ageDiv.textContent = profile.age;
   bioDiv.textContent = profile.bio;
   q1Div.textContent = profile.q1;
   q2Div.textContent = profile.q2;
   q3Div.textContent = profile.q3;
   currentcard.appendChild(nameDiv);
+  currentcard.appendChild(likeDiv);
   currentcard.appendChild(ageDiv);
   currentcard.appendChild(bioDiv);
   currentcard.appendChild(q1Div);
@@ -32,34 +37,45 @@ function renderProfile(profile) {
 }
 
 async function main() {
-  ///
   currentcard.textContent = "Loading....";
 
+  let profileIndex = 0;
+  let profiles = null;
   try {
-    const profiles = await getProfiles("http://localhost:3000/profiles");
-
-    let profileIndex = 0;
+    profiles = await getProfiles("http://localhost:3000/profiles");
 
     renderProfile(profiles[0]);
 
-    button = document.createElement("button");
-    button.textContent = "Next";
-    button.id = "Next";
-    root.appendChild(button);
+    const likeButton = document.createElement("button");
+    likeButton.textContent = "Like";
+    const passButton = document.createElement("button");
+    passButton.textContent = "Pass";
 
-    button.addEventListener("click", () => {
-      profileIndex = (profileIndex + 1) % profiles.length;
+    root.appendChild(likeButton);
+    root.appendChild(passButton);
 
-      renderProfile(profiles[profileIndex]);
+    likeButton.addEventListener("click", () => {
+      console.log(`Like ${profiles[profileIndex].id}`);
+      showNext();
+    });
+
+    passButton.addEventListener("click", () => {
+      console.log(`Pass ${profiles[profileIndex].id}`);
+      showNext();
     });
   } catch (e) {
     currentcard.textContent = "Couldn't load profiles";
     console.error(e);
   }
+
+  function showNext() {
+    profileIndex = (profileIndex + 1) % profiles.length;
+
+    renderProfile(profiles[profileIndex]);
+  }
 }
 
 const root = document.getElementById("root");
-let button = null;
 const currentcard = document.createElement("div");
 
 currentcard.className = "card";

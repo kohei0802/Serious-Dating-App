@@ -10,6 +10,11 @@ async function getProfiles(url) {
 }
 
 function renderProfile(profile) {
+  if (profile === null) {
+    currentcard.textContent = "No more profiles";
+    return;
+  }
+
   currentcard.textContent = "";
   const nameDiv = document.createElement("div");
   const likeDiv = document.createElement("div");
@@ -20,7 +25,7 @@ function renderProfile(profile) {
   const q3Div = document.createElement("div");
   nameDiv.textContent = profile.name;
   likeDiv.textContent = profile.likesYou
-    ? `${profile.name} liked your profile!`
+    ? `${profile.name} liked your profile`
     : "";
   ageDiv.textContent = profile.age;
   bioDiv.textContent = profile.bio;
@@ -57,7 +62,7 @@ async function main() {
   try {
     profiles = await getProfiles("http://localhost:3000/profiles");
 
-    renderProfile(profiles[0]);
+    renderProfile(profiles.length > 0 ? profiles[0] : null);
     renderMatch(getMatches(profiles, likedProfiles));
 
     const likeButton = document.createElement("button");
@@ -69,6 +74,9 @@ async function main() {
     cardHolder.appendChild(passButton);
 
     likeButton.addEventListener("click", () => {
+      if (profileIndex === profiles.length) {
+        return;
+      }
       console.log(`Like ${profiles[profileIndex].id}`);
       if (!likedProfiles.includes(profiles[profileIndex].id)) {
         likedProfiles.push(profiles[profileIndex].id);
@@ -80,6 +88,10 @@ async function main() {
     });
 
     passButton.addEventListener("click", () => {
+      if (profileIndex === profiles.length) {
+        return;
+      }
+
       console.log(`Pass ${profiles[profileIndex].id}`);
       showNext();
     });
@@ -89,9 +101,13 @@ async function main() {
   }
 
   function showNext() {
-    profileIndex = (profileIndex + 1) % profiles.length;
+    profileIndex = profileIndex + 1;
 
-    renderProfile(profiles[profileIndex]);
+    console.log(profileIndex);
+
+    renderProfile(
+      profileIndex < profiles.length ? profiles[profileIndex] : null,
+    );
   }
 
   function renderMatch(matches) {

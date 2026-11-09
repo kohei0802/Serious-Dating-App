@@ -46,7 +46,7 @@ function getMatches(profiles, likedProfiles) {
     (profile) => likedProfiles.includes(profile.id) && profile.likesYou,
   );
 
-  console.log("getMatches return ", matches);
+  // console.log("getMatches return ", matches);
 
   return matches;
 }
@@ -59,39 +59,33 @@ async function main() {
 
   let profileIndex = 0;
   let profiles = null;
+
+  const likeButton = document.createElement("button");
+  likeButton.textContent = "Like";
+  const passButton = document.createElement("button");
+  passButton.textContent = "Pass";
+
   try {
     profiles = await getProfiles("http://localhost:3000/profiles");
 
     renderProfile(profiles.length > 0 ? profiles[0] : null);
     renderMatch(getMatches(profiles, likedProfiles));
 
-    const likeButton = document.createElement("button");
-    likeButton.textContent = "Like";
-    const passButton = document.createElement("button");
-    passButton.textContent = "Pass";
-
     cardHolder.appendChild(likeButton);
     cardHolder.appendChild(passButton);
 
     likeButton.addEventListener("click", () => {
-      if (profileIndex === profiles.length) {
-        return;
-      }
       console.log(`Like ${profiles[profileIndex].id}`);
       if (!likedProfiles.includes(profiles[profileIndex].id)) {
         likedProfiles.push(profiles[profileIndex].id);
         localStorage.setItem("likedProfiles", JSON.stringify(likedProfiles));
         renderMatch(getMatches(profiles, likedProfiles));
       }
-      console.log(JSON.parse(localStorage.getItem("likedProfiles")));
+
       showNext();
     });
 
     passButton.addEventListener("click", () => {
-      if (profileIndex === profiles.length) {
-        return;
-      }
-
       console.log(`Pass ${profiles[profileIndex].id}`);
       showNext();
     });
@@ -101,9 +95,12 @@ async function main() {
   }
 
   function showNext() {
-    profileIndex = profileIndex + 1;
+    if (profileIndex === profiles.length - 1) {
+      likeButton.disabled = true;
+      passButton.disabled = true;
+    }
 
-    console.log(profileIndex);
+    profileIndex = profileIndex + 1;
 
     renderProfile(
       profileIndex < profiles.length ? profiles[profileIndex] : null,

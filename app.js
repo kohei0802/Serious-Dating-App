@@ -36,8 +36,23 @@ function renderProfile(profile) {
   currentcard.appendChild(q3Div);
 }
 
+// function getMatches(profiles, likedProfiles) {
+//   const matches = [];
+
+//   likedProfiles.array.forEach((id) => {
+//     if (profiles[id].likesYou) {
+//       matches.push(id);
+//     }
+//   });
+
+//   return id;
+// }
+
 async function main() {
   currentcard.textContent = "Loading....";
+
+  const storedLikedProfiles = JSON.parse(localStorage.getItem("likedProfiles"));
+  const likedProfiles = storedLikedProfiles ? storedLikedProfiles : [];
 
   let profileIndex = 0;
   let profiles = null;
@@ -56,6 +71,11 @@ async function main() {
 
     likeButton.addEventListener("click", () => {
       console.log(`Like ${profiles[profileIndex].id}`);
+      if (!likedProfiles.includes(profiles[profileIndex].id)) {
+        likedProfiles.push(profiles[profileIndex].id);
+        localStorage.setItem("likedProfiles", JSON.stringify(likedProfiles));
+      }
+      console.log(JSON.parse(localStorage.getItem("likedProfiles")));
       showNext();
     });
 

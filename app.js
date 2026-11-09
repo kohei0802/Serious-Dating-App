@@ -134,14 +134,23 @@ const root = document.getElementById("root");
 const cardHolder = document.createElement("div");
 const currentcard = document.createElement("div");
 const matchHolder = document.createElement("div");
+const resetter = document.createElement("button");
 
 cardHolder.className = "cardHolder";
 currentcard.className = "card";
 matchHolder.className = "match";
 
 root.appendChild(cardHolder);
+root.appendChild(matchHolder);
+root.appendChild(resetter);
+
 cardHolder.appendChild(currentcard);
 
-root.appendChild(matchHolder);
-
 main();
+
+resetter.textContent = "Reset";
+
+resetter.addEventListener("click", () => {
+  localStorage.removeItem("likedProfiles");
+  location.reload();
+});

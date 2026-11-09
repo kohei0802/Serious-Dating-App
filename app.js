@@ -5,7 +5,7 @@ async function getProfiles(url) {
   }
 
   const result = await response.json();
-  console.log(result);
+  console.log("getProfiles got ", result);
   return result;
 }
 
@@ -36,17 +36,15 @@ function renderProfile(profile) {
   currentcard.appendChild(q3Div);
 }
 
-// function getMatches(profiles, likedProfiles) {
-//   const matches = [];
+function getMatches(profiles, likedProfiles) {
+  const matches = profiles.filter((profile) =>
+    likedProfiles.includes(profile.id),
+  );
 
-//   likedProfiles.array.forEach((id) => {
-//     if (profiles[id].likesYou) {
-//       matches.push(id);
-//     }
-//   });
+  console.log("getMatches return ", matches);
 
-//   return id;
-// }
+  return matches;
+}
 
 async function main() {
   currentcard.textContent = "Loading....";

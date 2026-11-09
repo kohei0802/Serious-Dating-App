@@ -37,8 +37,8 @@ function renderProfile(profile) {
 }
 
 function getMatches(profiles, likedProfiles) {
-  const matches = profiles.filter((profile) =>
-    likedProfiles.includes(profile.id),
+  const matches = profiles.filter(
+    (profile) => likedProfiles.includes(profile.id) && profile.likesYou,
   );
 
   console.log("getMatches return ", matches);
@@ -58,20 +58,22 @@ async function main() {
     profiles = await getProfiles("http://localhost:3000/profiles");
 
     renderProfile(profiles[0]);
+    renderMatch(getMatches(profiles, likedProfiles));
 
     const likeButton = document.createElement("button");
     likeButton.textContent = "Like";
     const passButton = document.createElement("button");
     passButton.textContent = "Pass";
 
-    root.appendChild(likeButton);
-    root.appendChild(passButton);
+    cardHolder.appendChild(likeButton);
+    cardHolder.appendChild(passButton);
 
     likeButton.addEventListener("click", () => {
       console.log(`Like ${profiles[profileIndex].id}`);
       if (!likedProfiles.includes(profiles[profileIndex].id)) {
         likedProfiles.push(profiles[profileIndex].id);
         localStorage.setItem("likedProfiles", JSON.stringify(likedProfiles));
+        renderMatch(getMatches(profiles, likedProfiles));
       }
       console.log(JSON.parse(localStorage.getItem("likedProfiles")));
       showNext();
@@ -91,13 +93,39 @@ async function main() {
 
     renderProfile(profiles[profileIndex]);
   }
+
+  function renderMatch(matches) {
+    const header = document.createElement("header");
+    const ul = document.createElement("ul");
+
+    ul.className = "matchList";
+
+    matches.forEach((match) => {
+      const li = document.createElement("li");
+      li.textContent = match.name;
+      ul.appendChild(li);
+    });
+
+    matchHolder.textContent = "";
+    header.textContent = "Matches";
+
+    matchHolder.appendChild(header);
+    matchHolder.appendChild(ul);
+  }
 }
 
 const root = document.getElementById("root");
+const cardHolder = document.createElement("div");
 const currentcard = document.createElement("div");
+const matchHolder = document.createElement("div");
 
+cardHolder.className = "cardHolder";
 currentcard.className = "card";
+matchHolder.className = "match";
 
-root.appendChild(currentcard);
+root.appendChild(cardHolder);
+cardHolder.appendChild(currentcard);
+
+root.appendChild(matchHolder);
 
 main();

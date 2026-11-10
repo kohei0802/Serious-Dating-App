@@ -46,8 +46,6 @@ function getMatches(profiles, likedProfiles) {
     (profile) => likedProfiles.includes(profile.id) && profile.likesYou,
   );
 
-  // console.log("getMatches return ", matches);
-
   return matches;
 }
 

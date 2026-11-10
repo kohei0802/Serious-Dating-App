@@ -1,6 +1,6 @@
 // import { useState } from "react";
 
-function ProfileCard({ profile }) {
+export default function ProfileCard({ profile }) {
   return (
     <>
       <div>{profile.name}</div>
@@ -13,5 +13,3 @@ function ProfileCard({ profile }) {
     </>
   );
 }
-
-export default ProfileCard;

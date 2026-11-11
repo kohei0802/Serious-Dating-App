@@ -104,6 +104,14 @@ const profiles = [
   },
 ];
 
+function getMatches(profiles, likedProfiles) {
+  const matches = profiles.filter(
+    (profile) => likedProfiles.includes(profile.id) && profile.likesYou,
+  );
+
+  return matches;
+}
+
 function App() {
   const [profileIndex, setProfileIndex] = useState(0);
   const [likedProfiles, setLikedProfiles] = useState([]);
@@ -113,6 +121,11 @@ function App() {
       <ProfileCard profile={profiles[profileIndex]} />
       <button onClick={likeEventHandler}>Like</button>
       <button onClick={passEventHandler}>Pass</button>
+      <ul>
+        {getMatches(profiles, likedProfiles).map((profile) => (
+          <li key={profile.id}>{profile.name}</li>
+        ))}
+      </ul>
     </>
   );
 

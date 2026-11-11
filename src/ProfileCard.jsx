@@ -1,6 +1,10 @@
 // import { useState } from "react";
 
 export default function ProfileCard({ profile }) {
+  if (!profile) {
+    return <div>No more profiles</div>;
+  }
+
   return (
     <>
       <div>{profile.name}</div>

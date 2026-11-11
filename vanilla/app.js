@@ -106,7 +106,7 @@ async function main() {
   }
 
   function renderMatch(matches) {
-    const header = document.createElement("header");
+    const header = document.createElement("h2");
     const ul = document.createElement("ul");
 
     ul.className = "matchList";

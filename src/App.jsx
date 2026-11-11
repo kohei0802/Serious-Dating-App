@@ -115,12 +115,19 @@ function getMatches(profiles, likedProfiles) {
 function App() {
   const [profileIndex, setProfileIndex] = useState(0);
   const [likedProfiles, setLikedProfiles] = useState([]);
-  console.log("likeEventt", likedProfiles);
+
+  const reachedEnd = profileIndex === profiles.length;
+
   return (
     <>
       <ProfileCard profile={profiles[profileIndex]} />
-      <button onClick={likeEventHandler}>Like</button>
-      <button onClick={passEventHandler}>Pass</button>
+      <button disabled={reachedEnd} onClick={likeEventHandler}>
+        Like
+      </button>
+      <button disabled={reachedEnd} onClick={passEventHandler}>
+        Pass
+      </button>
+      <h2>Matches</h2>
       <ul>
         {getMatches(profiles, likedProfiles).map((profile) => (
           <li key={profile.id}>{profile.name}</li>
@@ -144,7 +151,7 @@ function App() {
 
   function showNext() {
     setProfileIndex((prevI) => {
-      if (prevI === profiles.length - 1) {
+      if (prevI === profiles.length) {
         return prevI;
       }
       return prevI + 1;

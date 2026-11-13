@@ -9,9 +9,14 @@ function getMatches(profiles, likedProfiles) {
   return matches;
 }
 
-function App() {
-  const url = "http://localhost:3000/profiles";
+function getLikedProfiles() {
+  const storedLikedProfiles = JSON.parse(localStorage.getItem("likedProfiles"));
+  return storedLikedProfiles ? storedLikedProfiles : [];
+}
 
+const url = "http://localhost:3000/profiles";
+
+function App() {
   const [profiles, setProfiles] = useState([]);
   const [status, setStatus] = useState("loading");
 
@@ -43,7 +48,7 @@ function App() {
     return () => {
       ignore = true;
     };
-  }, [url]);
+  }, []);
 
   const [profileIndex, setProfileIndex] = useState(0);
   const [likedProfiles, setLikedProfiles] = useState(getLikedProfiles);
@@ -84,15 +89,9 @@ function App() {
           <li key={profile.id}>{profile.name}</li>
         ))}
       </ul>
+      <button onClick={resetHandler}>Reset</button>
     </>
   );
-
-  function getLikedProfiles() {
-    const storedLikedProfiles = JSON.parse(
-      localStorage.getItem("likedProfiles"),
-    );
-    return storedLikedProfiles ? storedLikedProfiles : [];
-  }
 
   function likeEventHandler() {
     const profileId = profiles[profileIndex].id;
@@ -105,6 +104,10 @@ function App() {
 
   function passEventHandler() {
     showNext();
+  }
+
+  function resetHandler() {
+    setLikedProfiles([]);
   }
 
   function showNext() {

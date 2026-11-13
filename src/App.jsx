@@ -46,7 +46,12 @@ function App() {
   }, [url]);
 
   const [profileIndex, setProfileIndex] = useState(0);
-  const [likedProfiles, setLikedProfiles] = useState([]);
+  const [likedProfiles, setLikedProfiles] = useState(getLikedProfiles);
+
+  useEffect(() => {
+    localStorage.setItem("likedProfiles", JSON.stringify(likedProfiles));
+  }, [likedProfiles]);
+
   const renderCard = () => {
     switch (status) {
       case "loading":
@@ -81,6 +86,13 @@ function App() {
       </ul>
     </>
   );
+
+  function getLikedProfiles() {
+    const storedLikedProfiles = JSON.parse(
+      localStorage.getItem("likedProfiles"),
+    );
+    return storedLikedProfiles ? storedLikedProfiles : [];
+  }
 
   function likeEventHandler() {
     const profileId = profiles[profileIndex].id;

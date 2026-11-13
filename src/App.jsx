@@ -1,13 +1,6 @@
 import { useEffect, useState } from "react";
-import ProfileCard from "./ProfileCard.jsx";
-
-function getMatches(profiles, likedProfiles) {
-  const matches = profiles.filter(
-    (profile) => likedProfiles.includes(profile.id) && profile.likesYou,
-  );
-
-  return matches;
-}
+import Matches from "./Matches.jsx";
+import Browse from "./Browse.jsx";
 
 function getLikedProfiles() {
   const storedLikedProfiles = JSON.parse(localStorage.getItem("likedProfiles"));
@@ -19,6 +12,10 @@ const url = "http://localhost:3000/profiles";
 function App() {
   const [profiles, setProfiles] = useState([]);
   const [status, setStatus] = useState("loading");
+
+  const [profileIndex, setProfileIndex] = useState(0);
+
+  const [likedProfiles, setLikedProfiles] = useState(getLikedProfiles);
 
   useEffect(() => {
     let ignore = false;
@@ -50,19 +47,24 @@ function App() {
     };
   }, []);
 
-  const [profileIndex, setProfileIndex] = useState(0);
-  const [likedProfiles, setLikedProfiles] = useState(getLikedProfiles);
-
   useEffect(() => {
     localStorage.setItem("likedProfiles", JSON.stringify(likedProfiles));
   }, [likedProfiles]);
 
-  const renderCard = () => {
+  const renderBrowse = () => {
     switch (status) {
       case "loading":
         return <div>Loading ...</div>;
       case "ready":
-        return <ProfileCard profile={profiles[profileIndex]} />;
+        return (
+          <Browse
+            profiles={profiles}
+            likedProfiles={likedProfiles}
+            onLike={setLikedProfiles}
+            profileIndex={profileIndex}
+            onNext={setProfileIndex}
+          />
+        );
       case "error":
         return <div>Could not load profiles</div>;
     }
@@ -70,53 +72,15 @@ function App() {
 
   return (
     <>
-      {renderCard()}
-      <button
-        disabled={profileIndex === profiles.length}
-        onClick={likeEventHandler}
-      >
-        Like
-      </button>
-      <button
-        disabled={profileIndex === profiles.length}
-        onClick={passEventHandler}
-      >
-        Pass
-      </button>
-      <h2>Matches</h2>
-      <ul>
-        {getMatches(profiles, likedProfiles).map((profile) => (
-          <li key={profile.id}>{profile.name}</li>
-        ))}
-      </ul>
+      {renderBrowse()}
+      <Matches profiles={profiles} likedProfiles={likedProfiles} />
       <button onClick={resetHandler}>Reset</button>
     </>
   );
 
-  function likeEventHandler() {
-    const profileId = profiles[profileIndex].id;
-    if (!likedProfiles.includes(profileId)) {
-      setLikedProfiles((prevLPs) => [...prevLPs, profileId]);
-    }
-
-    showNext();
-  }
-
-  function passEventHandler() {
-    showNext();
-  }
-
   function resetHandler() {
     setLikedProfiles([]);
-  }
-
-  function showNext() {
-    setProfileIndex((prevI) => {
-      if (prevI === profiles.length) {
-        return prevI;
-      }
-      return prevI + 1;
-    });
+    setProfileIndex(0);
   }
 }
 
